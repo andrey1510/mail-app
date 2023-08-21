@@ -1,0 +1,28 @@
+package com.mailapp.services;
+
+import com.mailapp.entities.PostalItem;
+import com.mailapp.repositories.PostalItemRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import java.util.UUID;
+
+@Service
+public class PostalItemServiceImpl implements PostalItemService {
+
+    @Autowired
+    private PostalItemRepository postalItemRepository;
+
+    @Override
+    @Transactional
+    public PostalItem createPostalItem(PostalItem postalItem) {
+        return postalItemRepository.save(postalItem);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PostalItem getPostalItemByIdentifier(UUID identifier) {
+        return postalItemRepository.getPostalItemByIdentifier(identifier);
+    }
+
+}

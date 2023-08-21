@@ -1,10 +1,10 @@
 package com.mailapp.enums;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.ToString;
 
-@ToString
-@AllArgsConstructor
+@Getter
 public enum PostalType {
 
     LETTER("Письмо"),
@@ -12,6 +12,14 @@ public enum PostalType {
     PARCEL("Бандероль"),
     POSTCARD("Бандероль");
 
-    private final String postalType;
+    private final String typeTitle;
 
+    PostalType(String typeTitle) {
+        this.typeTitle = typeTitle;
+    }
+
+    @Override
+    public String toString() {
+        return typeTitle;
+    }
 }

@@ -1,10 +1,11 @@
 package com.mailapp.enums;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.ToString;
 
-@ToString
-@AllArgsConstructor
+
+@Getter
 public enum PostalStatus {
 
     REGISTERED("Зарегистрировано"),
@@ -12,6 +13,15 @@ public enum PostalStatus {
     OUT_OF_OFFICE("Покинуло почтовое отделение"),
     RECEIVED("Получено адресатом");
 
-    private final String postalStatus;
 
+    PostalStatus(String statusTitle) {
+        this.statusTitle = statusTitle;
+    }
+
+    private final String statusTitle;
+
+    @Override
+    public String toString() {
+        return statusTitle;
+    }
 }
