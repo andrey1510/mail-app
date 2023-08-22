@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
 import java.util.UUID;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
@@ -21,9 +20,9 @@ public class PostalItem {
 
     @Id
     @GeneratedValue
-    @Column(name = "identifier", updatable = false, nullable = false)
+    @Column(name = "postal_item_id", updatable = false, nullable = false)
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
-    private UUID identifier;
+    private UUID postalItemId;
 
     @Column(name = "postal_type", nullable = false)
     @Enumerated(EnumType.STRING)

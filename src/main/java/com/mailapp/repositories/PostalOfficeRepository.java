@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface PostalOfficeRepository extends JpaRepository<PostalOffice, Integer> {
+public interface PostalOfficeRepository extends JpaRepository<PostalOffice, String> {
 
-    PostalOffice getPostalOfficeByOfficeIndex(@Param("office_index") String officeIndex);
+   // PostalOffice getPostalOfficeByOfficeIndex(@Param("office_index") String officeIndex);
 
 }

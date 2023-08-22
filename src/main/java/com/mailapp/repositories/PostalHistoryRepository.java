@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface PostalHistoryRepository extends JpaRepository<PostalHistory, Integer> {
+public interface PostalHistoryRepository extends JpaRepository<PostalHistory, UUID> {
 
-    List<PostalHistory> getPostalHistoriesByPostalItem_Identifier(@Param("identifier") UUID identifier);
+    List<PostalHistory> findAllByPostalItemPostalItemId(@Param("postal_item_id") UUID postalItemId);
 
 
 }

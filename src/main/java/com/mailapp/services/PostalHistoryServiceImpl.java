@@ -23,8 +23,8 @@ public class PostalHistoryServiceImpl implements PostalHistoryService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PostalHistory> getPostalHistoriesByPostalItem_Identifier(UUID identifier){
-        return postalHistoryRepository.getPostalHistoriesByPostalItem_Identifier(identifier);
+    public List<PostalHistory> getPostalHistoriesByPostalItem_Id(UUID postalItemId){
+        return postalHistoryRepository.findAllByPostalItemPostalItemId(postalItemId);
     }
 
 

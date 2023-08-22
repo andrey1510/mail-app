@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class PostalOfficeServiceImpl implements PostalOfficeService {
 
@@ -20,8 +22,8 @@ public class PostalOfficeServiceImpl implements PostalOfficeService {
 
     @Override
     @Transactional(readOnly = true)
-    public PostalOffice getPostalOfficeByOfficeIndex(String officeIndex) {
-        return postalOfficeRepository.getPostalOfficeByOfficeIndex(officeIndex);
+    public Optional<PostalOffice> findById(String officeIndex) {
+        return postalOfficeRepository.findById(officeIndex);
     }
 
 }

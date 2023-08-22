@@ -1,9 +1,6 @@
 package com.mailapp.controllers;
 
-import com.mailapp.entities.PostalHistory;
-import com.mailapp.entities.PostalItem;
 import com.mailapp.entities.PostalOffice;
-import com.mailapp.enums.PostalStatus;
 import com.mailapp.services.PostalOfficeService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +26,8 @@ public class PostalOfficeManagementController {
 
     @GetMapping("{office_index}")
     @Operation(description = "Найти почтовое отделение по индексу.")
-    public PostalOffice getPostalOffice(String officeIndex) {
-        return postalOfficeService.getPostalOfficeByOfficeIndex(officeIndex);
+    public PostalOffice getPostalOffice(@PathVariable("office_index") String officeIndex) {
+        return postalOfficeService.findById(officeIndex).orElseThrow();
     }
 
 }

@@ -8,5 +8,5 @@ public interface PostalHistoryService {
 
     PostalHistory createPostalHistory(PostalHistory postalHistory);
 
-    List<PostalHistory> getPostalHistoriesByPostalItem_Identifier(UUID identifier);
+    List<PostalHistory> getPostalHistoriesByPostalItem_Id(UUID id);
 }

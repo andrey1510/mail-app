@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -21,23 +22,25 @@ public class PostalHistory {
 
     @Id
     @GeneratedValue
-    @Column(name = "id", updatable = false, nullable = false)
+    @Column(name = "history_record_id", updatable = false, nullable = false)
     @Schema(requiredMode = REQUIRED, description = "ID записи в истории.")
-    private UUID id;
+    private UUID historyRecordId;
 
     @Column(name = "postal_status", nullable = false)
     @Enumerated(EnumType.STRING)
     @Schema(requiredMode = REQUIRED, description = "Статус почтового отправления.")
     private PostalStatus postalStatus;
 
-    @OneToOne()
+    @ManyToOne()
     private PostalItem postalItem;
 
-    @OneToOne()
+    @ManyToOne()
     private PostalOffice postalOffice;
-//
-//    @Column(name = "timestamp", updatable = false, nullable = false)
-//    private Timestamp timestamp;
+
+    @Column(name = "timestamp", updatable = false, nullable = false)
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Timestamp timestamp;
 
     public PostalHistory(PostalStatus postalStatus, PostalItem postalItem) {
         this.postalStatus = postalStatus;

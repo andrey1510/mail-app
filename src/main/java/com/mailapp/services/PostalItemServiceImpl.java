@@ -5,6 +5,8 @@ import com.mailapp.repositories.PostalItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -20,9 +22,9 @@ public class PostalItemServiceImpl implements PostalItemService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public PostalItem getPostalItemByIdentifier(UUID identifier) {
-        return postalItemRepository.getPostalItemByIdentifier(identifier);
+   // @Transactional(readOnly = true)
+    public Optional<PostalItem> findById(UUID postalItemId) {
+        return postalItemRepository.findById(postalItemId);
     }
 
 }

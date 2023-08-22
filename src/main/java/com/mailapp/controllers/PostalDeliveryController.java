@@ -8,7 +8,6 @@ import com.mailapp.services.PostalItemService;
 import com.mailapp.services.PostalHistoryService;
 import com.mailapp.services.PostalOfficeService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,15 +33,20 @@ public class PostalDeliveryController {
 
         postalHistoryService.createPostalHistory(new PostalHistory(PostalStatus.REGISTERED, createdItem));
 
-        return new ResponseEntity<>(postalItem.getIdentifier(), HttpStatus.OK);
+        return new ResponseEntity<>(postalItem.getPostalItemId(), HttpStatus.OK);
     }
 
-    @PostMapping("get_post_to_office")
-    @Operation(description = "Внести запись о прибытии почтового отправления в почтовое отделение")
-    public ResponseEntity<PostalStatus> getPostalItemToPostalOffice(UUID identifier, String officeIndex) {
 
-        PostalItem postalItem = postalItemService.getPostalItemByIdentifier(identifier);
-        PostalOffice postalOffice = postalOfficeService.getPostalOfficeByOfficeIndex(officeIndex);
+
+
+
+    @PostMapping("get_post_to_office/{postal_item_id}&{office_index}")
+    @Operation(description = "Внести запись о прибытии почтового отправления в почтовое отделение")
+    public ResponseEntity<PostalStatus> getPostalItemToPostalOffice(@PathVariable("postal_item_id") UUID postalItemId,
+                                                                    @PathVariable("office_index") String officeIndex) {
+
+        PostalItem postalItem = postalItemService.findById(postalItemId).orElseThrow();
+        PostalOffice postalOffice = postalOfficeService.findById(officeIndex).orElseThrow();
         PostalHistory postalHistory = new PostalHistory(PostalStatus.IN_OFFICE, postalItem, postalOffice);
 
         postalHistoryService.createPostalHistory(postalHistory);
@@ -50,12 +54,13 @@ public class PostalDeliveryController {
         return new ResponseEntity<>(postalHistory.getPostalStatus(), HttpStatus.OK);
     }
 
-    @PostMapping("send_post_from_office")
+    @PostMapping("send_post_from_office/{postal_item_id}&{office_index}")
     @Operation(description = "Внести запись об убытии почтового отправления из почтового отделения.")
-    public ResponseEntity<PostalStatus> sendPostalItemFromPostalOffice(UUID identifier, String officeIndex) {
+    public ResponseEntity<PostalStatus> sendPostalItemFromPostalOffice(@PathVariable("postal_item_id") UUID postalItemId,
+                                                                       @PathVariable("office_index") String officeIndex) {
 
-        PostalItem postalItem = postalItemService.getPostalItemByIdentifier(identifier);
-        PostalOffice postalOffice = postalOfficeService.getPostalOfficeByOfficeIndex(officeIndex);
+        PostalItem postalItem = postalItemService.findById(postalItemId).orElseThrow();
+        PostalOffice postalOffice = postalOfficeService.findById(officeIndex).orElseThrow();
         PostalHistory postalHistory = new PostalHistory(PostalStatus.OUT_OF_OFFICE, postalItem, postalOffice);
 
         postalHistoryService.createPostalHistory(postalHistory);
@@ -63,11 +68,11 @@ public class PostalDeliveryController {
         return new ResponseEntity<>(postalHistory.getPostalStatus(), HttpStatus.OK);
     }
 
-    @PostMapping("deliver_post_to_recipient")
+    @PostMapping("deliver_post_to_recipient/{postal_item_id}&{office_index}")
     @Operation(description = "Внести запись о получении почтового отправления адресатом.")
-    public ResponseEntity<PostalStatus> deliverPostalItemToRecipient(UUID identifier){
+    public ResponseEntity<PostalStatus> deliverPostalItemToRecipient(@PathVariable("postal_item_id") UUID postalItemId){
 
-        PostalItem postalItem = postalItemService.getPostalItemByIdentifier(identifier);
+        PostalItem postalItem = postalItemService.findById(postalItemId).orElseThrow();
         PostalHistory postalHistory = new PostalHistory(PostalStatus.RECEIVED, postalItem);
 
         postalHistoryService.createPostalHistory(postalHistory);
@@ -75,10 +80,10 @@ public class PostalDeliveryController {
         return new ResponseEntity<>(postalHistory.getPostalStatus(), HttpStatus.OK);
     }
 
-    @GetMapping ("postal_item/{identifier}")
+    @GetMapping ("postal_item_history/{postal_item_id}")
     @Operation(description = "Просмотреть статус и полную историю движения почтового отправления.")
-    public List<PostalHistory> checkHistory(@RequestBody UUID identifier) {
-        return postalHistoryService.getPostalHistoriesByPostalItem_Identifier(identifier);
+    public List<PostalHistory> checkHistory(@PathVariable("postal_item_id") UUID postalItemId) {
+        return postalHistoryService.getPostalHistoriesByPostalItem_Id(postalItemId);
     }
 
 }
