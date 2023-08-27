@@ -1,10 +1,10 @@
 package com.mailapp.enums;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
-@Getter
+//Getter
+//@JsonFormat
 public enum PostalType {
 
     LETTER("Письмо"),
@@ -12,14 +12,30 @@ public enum PostalType {
     PARCEL("Бандероль"),
     POSTCARD("Бандероль");
 
-    private final String typeTitle;
-
     PostalType(String typeTitle) {
         this.typeTitle = typeTitle;
     }
 
+    private final String typeTitle;
+
     @Override
+    @JsonValue
     public String toString() {
-        return typeTitle;
+        return this.typeTitle;
     }
+
+    public String getTypeTitle() {
+        return this.typeTitle;
+    }
+
+    @JsonCreator
+    public static PostalType fromValue(String value) {
+        for (PostalType type : PostalType.values()) {
+            if (type.typeTitle.equals(value)) {
+                return type;
+            }
+        }
+        throw new IllegalArgumentException();
+    }
+
 }

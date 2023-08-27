@@ -6,9 +6,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.UUID;
-
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 @NoArgsConstructor
@@ -21,12 +19,12 @@ public class PostalItem {
     @Id
     @GeneratedValue
     @Column(name = "postal_item_id", updatable = false, nullable = false)
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY, example = "3fa85f64-5717-4562-b3fc-2c963f66afa6", description = "Идентификатор почтового отправления.")
     private UUID postalItemId;
 
     @Column(name = "postal_type", nullable = false)
     @Enumerated(EnumType.STRING)
-    @Schema(requiredMode = REQUIRED, example = "LETTER", description = "Тип почтового отправления", allowableValues = {"LETTER", "PACKAGE", "PARCEL", "POSTCARD"})
+    @Schema(requiredMode = REQUIRED, example = "LETTER", description = "Тип почтового отправления", allowableValues = {"Письмо", "Посылка", "Бандероль", "Открытка"})
     private PostalType postalType;
 
     @Column(name = "recipient_index", nullable = false)

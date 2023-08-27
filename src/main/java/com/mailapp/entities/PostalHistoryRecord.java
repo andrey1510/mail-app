@@ -7,18 +7,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-
 import java.sql.Timestamp;
 import java.util.UUID;
-
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name = "postal_history")
-public class PostalHistory {
+@Table(name = "postal_history_record")
+public class PostalHistoryRecord {
 
     @Id
     @GeneratedValue
@@ -42,12 +40,12 @@ public class PostalHistory {
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp timestamp;
 
-    public PostalHistory(PostalStatus postalStatus, PostalItem postalItem) {
+    public PostalHistoryRecord(PostalStatus postalStatus, PostalItem postalItem) {
         this.postalStatus = postalStatus;
         this.postalItem = postalItem;
     }
 
-    public PostalHistory(PostalStatus postalStatus, PostalItem postalItem, PostalOffice postalOffice) {
+    public PostalHistoryRecord(PostalStatus postalStatus, PostalItem postalItem, PostalOffice postalOffice) {
         this.postalStatus = postalStatus;
         this.postalItem = postalItem;
         this.postalOffice = postalOffice;
