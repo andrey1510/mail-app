@@ -7,7 +7,7 @@ import com.mailapp.entities.PostalItem;
 import com.mailapp.entities.PostalOffice;
 import com.mailapp.enums.PostalStatus;
 import com.mailapp.services.PostalItemService;
-import com.mailapp.services.PostalRecordService;
+import com.mailapp.services.PostalHistoryRecordService;
 import com.mailapp.services.PostalOfficeService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ import java.util.UUID;
 public class PostalDeliveryController {
 
     private final PostalItemService postalItemService;
-    private final PostalRecordService postalRecordService;
+    private final PostalHistoryRecordService postalHistoryRecordService;
     private final PostalOfficeService postalOfficeService;
 
     @PostMapping("register")
@@ -34,7 +34,7 @@ public class PostalDeliveryController {
         PostalItem createdItem = postalItemService.createPostalItem(postalItem);
         PostalHistoryRecord postalHistoryRecord = new PostalHistoryRecord(PostalStatus.REGISTERED, createdItem);
 
-        postalRecordService.createPostalHistory(postalHistoryRecord);
+        postalHistoryRecordService.createPostalHistory(postalHistoryRecord);
 
         return new ResponseEntity<>(createdItem.getPostalItemId(), HttpStatus.OK);
     }
@@ -48,7 +48,7 @@ public class PostalDeliveryController {
         PostalOffice postalOffice = postalOfficeService.findById(officeIndex).orElseThrow();
         PostalHistoryRecord postalHistoryRecord = new PostalHistoryRecord(PostalStatus.IN_OFFICE, postalItem, postalOffice);
 
-        postalRecordService.createPostalHistory(postalHistoryRecord);
+        postalHistoryRecordService.createPostalHistory(postalHistoryRecord);
 
         return new ResponseEntity<>(postalHistoryRecord.getPostalStatus(), HttpStatus.OK);
     }
@@ -62,7 +62,7 @@ public class PostalDeliveryController {
         PostalOffice postalOffice = postalOfficeService.findById(officeIndex).orElseThrow();
         PostalHistoryRecord postalHistoryRecord = new PostalHistoryRecord(PostalStatus.OUT_OF_OFFICE, postalItem, postalOffice);
 
-        postalRecordService.createPostalHistory(postalHistoryRecord);
+        postalHistoryRecordService.createPostalHistory(postalHistoryRecord);
 
         return new ResponseEntity<>(postalHistoryRecord.getPostalStatus(), HttpStatus.OK);
     }
@@ -74,7 +74,7 @@ public class PostalDeliveryController {
         PostalItem postalItem = postalItemService.findById(postalItemId).orElseThrow();
         PostalHistoryRecord postalHistoryRecord = new PostalHistoryRecord(PostalStatus.RECEIVED, postalItem);
 
-        postalRecordService.createPostalHistory(postalHistoryRecord);
+        postalHistoryRecordService.createPostalHistory(postalHistoryRecord);
 
         return new ResponseEntity<>(postalHistoryRecord.getPostalStatus(), HttpStatus.OK);
     }
@@ -84,7 +84,7 @@ public class PostalDeliveryController {
     public PostalItemInfo checkPostalItemHistory(@PathVariable("postal_item_id") UUID postalItemId) {
 
         PostalItem postalItem = postalItemService.findById(postalItemId).orElseThrow();
-        List<PostalHistoryOfItem> postalHistory = postalRecordService.getPostalHistory(postalItemId);
+        List<PostalHistoryOfItem> postalHistory = postalHistoryRecordService.getPostalHistory(postalItemId);
 
         return new PostalItemInfo(postalItem, postalHistory);
     }

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface PostalRecordRepository extends JpaRepository<PostalHistoryRecord, UUID> {
+public interface PostalHistoryRecordRepository extends JpaRepository<PostalHistoryRecord, UUID> {
 
     List<PostalHistoryRecord> findAllByPostalItemPostalItemIdOrderByTimestampDesc (@Param("postal_item_id") UUID postalItemId);
 
