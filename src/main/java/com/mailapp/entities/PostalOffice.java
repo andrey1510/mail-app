@@ -1,7 +1,9 @@
 package com.mailapp.entities;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+
 import jakarta.persistence.*;
+
 import lombok.*;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
@@ -10,6 +12,7 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 @AllArgsConstructor
 @Data
 @Entity
+@Builder
 @Table(name = "postal_office")
 public class PostalOffice {
 

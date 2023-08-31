@@ -1,6 +1,7 @@
 package com.mailapp.services;
 
 import com.mailapp.entities.PostalOffice;
+
 import java.util.Optional;
 
 public interface PostalOfficeService {

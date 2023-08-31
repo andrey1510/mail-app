@@ -3,17 +3,22 @@ package com.mailapp.servicesTests;
 import com.mailapp.entities.PostalOffice;
 import com.mailapp.repositories.PostalOfficeRepository;
 import com.mailapp.services.PostalOfficeServiceImpl;
+import com.mailapp.testData.TestData;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class PostalOfficeServiceImplTests {
+class PostalOfficeServiceImplTests extends TestData {
 
     @InjectMocks
     PostalOfficeServiceImpl postalOfficeServiceImpl;
@@ -21,26 +26,19 @@ class PostalOfficeServiceImplTests {
     @Mock
     PostalOfficeRepository postalOfficeRepository;
 
+    private final PostalOffice postalOffice1 = createOffice1();
+
     @Test
-    void testCreatePostalItem(){
+    void createPostalItemTest(){
         when(postalOfficeRepository.save(postalOffice1)).thenReturn(postalOffice1);
         assertEquals(postalOffice1, postalOfficeServiceImpl.createPostalOffice(postalOffice1));
     }
 
     @Test
-    void testFindById(){
+    void findByIdTest(){
         when(postalOfficeRepository.findById(postalOffice1.getOfficeIndex())).thenReturn(Optional.of(postalOffice1));
         assertEquals(postalOffice1, postalOfficeServiceImpl.findById(postalOffice1.getOfficeIndex()).orElseThrow());
         verify(postalOfficeRepository, times(1)).findById(postalOffice1.getOfficeIndex());
     }
-
-
-    ////////////////// Test Data ///////////////
-
-    PostalOffice postalOffice1 = new PostalOffice(
-            "223005",
-            "Второе почтовое отделение",
-            "г. Ярославль, ул. Северная, дом 3"
-    );
 
 }

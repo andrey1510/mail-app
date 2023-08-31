@@ -3,10 +3,17 @@ package com.mailapp.controllersTests;
 import com.mailapp.controllers.PostalOfficeManagementController;
 import com.mailapp.entities.PostalOffice;
 import com.mailapp.services.PostalOfficeServiceImpl;
+import com.mailapp.testData.TestData;
+
+import lombok.SneakyThrows;
+
 import org.hamcrest.Matchers;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mockito;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -17,9 +24,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
+
 import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import static org.mockito.Mockito.when;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -28,7 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(PostalOfficeManagementController.class)
-class PostalOfficeManagementControllerTests {
+class PostalOfficeManagementControllerTests extends TestData {
 
     @MockBean
     PostalOfficeServiceImpl postalOfficeServiceImpl;
@@ -36,8 +47,11 @@ class PostalOfficeManagementControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
+    private final PostalOffice postalOffice1 = createOffice1();
+
     @Test
-    void testGetPostalOffice() throws Exception {
+    @SneakyThrows
+    void getPostalOfficeTest() {
 
         when(postalOfficeServiceImpl.findById(postalOffice1.getOfficeIndex()))
                 .thenReturn(Optional.of(postalOffice1));
@@ -63,13 +77,5 @@ class PostalOfficeManagementControllerTests {
         MockHttpServletResponse response = result.getResponse();
         assertEquals(HttpStatus.OK.value(), response.getStatus());
     }
-
-    ////////////////// Test Data ///////////////
-
-    PostalOffice postalOffice1 = new PostalOffice(
-            "223005",
-            "Второе почтовое отделение",
-            "г. Ярославль, ул. Северная, дом 3"
-    );
 
 }

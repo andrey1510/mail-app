@@ -1,34 +1,34 @@
 package com.mailapp.controllersTests;
 
-
 import com.mailapp.controllers.PostalItemManagementController;
 import com.mailapp.entities.PostalItem;
 import com.mailapp.services.PostalItemServiceImpl;
-import com.mailapp.services.PostalOfficeServiceImpl;
-import io.swagger.v3.oas.annotations.Operation;
+import com.mailapp.testData.TestData;
+
+import lombok.SneakyThrows;
+
 import org.hamcrest.Matchers;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Optional;
-import java.util.UUID;
 
-import static com.mailapp.enums.PostalType.LETTER;
 import static org.mockito.Mockito.when;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(PostalItemManagementController.class)
-class PostalItemManagementControllerTests {
+class PostalItemManagementControllerTests extends TestData {
 
     @MockBean
     PostalItemServiceImpl postalItemServiceImpl;
@@ -36,13 +36,16 @@ class PostalItemManagementControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
-    void testFindById() throws Exception {
+    private final PostalItem postalItem1 = createItem1();
 
-        when(postalItemServiceImpl.findById(itemUUID1))
+    @Test
+    @SneakyThrows
+    void findByIdTest() {
+
+        when(postalItemServiceImpl.findById(postalItem1.getPostalItemId()))
                 .thenReturn(Optional.of(postalItem1));
 
-        this.mockMvc.perform(get("/api/postal_item/{itemUUID1}", itemUUID1))
+        this.mockMvc.perform(get("/api/postal_item/{itemUUID1}", postalItem1.getPostalItemId().toString()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", Matchers.notNullValue()))
                 .andExpect(jsonPath("$.postalItemId", Matchers.is(postalItem1.getPostalItemId().toString())))
@@ -51,16 +54,5 @@ class PostalItemManagementControllerTests {
                 .andExpect(jsonPath("$.recipientAddress", Matchers.is(postalItem1.getRecipientAddress())))
                 .andExpect(jsonPath("$.recipientName", Matchers.is(postalItem1.getRecipientName())));
     }
-
-    ////////////////// Test Data ///////////////
-
-    UUID itemUUID1 = UUID.fromString("4165272a-e9e9-40f6-b1c5-29ca31f0d1e2");
-    PostalItem postalItem1 = new PostalItem(
-            itemUUID1,
-            LETTER,
-            "101001",
-            "г. Москва, ул. Первая, дом 1",
-            "Петров Петр Петрович"
-    );
 
 }

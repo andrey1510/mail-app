@@ -3,8 +3,7 @@ package com.mailapp.enums;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-//@Getter
-//@AllArgsConstructor
+
 public enum PostalStatus {
 
     IN_OFFICE("Прибыло в почтовое отделение"),

@@ -3,8 +3,6 @@ package com.mailapp.enums;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-//Getter
-//@JsonFormat
 public enum PostalType {
 
     LETTER("Письмо"),

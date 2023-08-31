@@ -1,17 +1,17 @@
 package com.mailapp.repositories;
 
 import com.mailapp.entities.PostalHistoryRecord;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.UUID;
 
 @Repository
 public interface PostalHistoryRecordRepository extends JpaRepository<PostalHistoryRecord, UUID> {
-
-    List<PostalHistoryRecord> findAllByPostalItemPostalItemIdOrderByTimestampDesc (@Param("postal_item_id") UUID postalItemId);
 
     @Query("select " +
                 "r.historyRecordId, " +
