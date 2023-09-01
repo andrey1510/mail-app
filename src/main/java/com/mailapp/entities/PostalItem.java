@@ -31,7 +31,7 @@ public class PostalItem {
 
     @Column(name = "postal_type", nullable = false)
     @Enumerated(EnumType.STRING)
-    @Schema(requiredMode = REQUIRED, example = "Письмо", description = "Тип почтового отправления", allowableValues = {"Письмо", "Посылка", "Бандероль", "Открытка"})
+    @Schema(requiredMode = REQUIRED, example = "Письмо", description = "Тип почтового отправления")
     private PostalType postalType;
 
     @Column(name = "recipient_index", nullable = false)

@@ -8,7 +8,7 @@ public enum PostalType {
     LETTER("Письмо"),
     PACKAGE("Посылка"),
     PARCEL("Бандероль"),
-    POSTCARD("Бандероль");
+    POSTCARD("Открытка");
 
     PostalType(String typeTitle) {
         this.typeTitle = typeTitle;
