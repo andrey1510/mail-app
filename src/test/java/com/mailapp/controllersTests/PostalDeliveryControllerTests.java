@@ -1,6 +1,11 @@
 package com.mailapp.controllersTests;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.mailapp.controllers.PostalDeliveryController;
+import com.mailapp.dto.PostalHistoryOfItem;
+import com.mailapp.dto.PostalItemInfo;
+
 import com.mailapp.entities.PostalHistoryRecord;
 import com.mailapp.entities.PostalItem;
 import com.mailapp.entities.PostalOffice;
@@ -9,9 +14,12 @@ import com.mailapp.services.PostalHistoryRecordServiceImpl;
 import com.mailapp.services.PostalItemServiceImpl;
 import com.mailapp.services.PostalOfficeServiceImpl;
 import com.mailapp.testData.TestData;
+
 import lombok.SneakyThrows;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,6 +29,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -48,6 +57,9 @@ class PostalDeliveryControllerTests extends TestData {
     private final PostalItem postalItem1 = createItem1();
     private final PostalOffice postalOffice1 = createOffice1();
     private final String postalItemJson1 = createItemJsonString1();
+    private final List<PostalHistoryOfItem> postalHistory = createItemHistoryList();
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     @SneakyThrows
@@ -122,12 +134,27 @@ class PostalDeliveryControllerTests extends TestData {
         verify(postalHistoryRecordServiceImpl).createPostalHistory(any(PostalHistoryRecord.class));
     }
 
+    @Test
+    @SneakyThrows
+    void checkPostalItemHistoryTest(){
 
+        PostalItemInfo postalItemInfo = new PostalItemInfo(postalItem1, postalHistory);
 
-//    @Test
-//    void checkPostalItemHistoryTest(){
-//
-//    }
+        when(postalItemServiceImpl.findById(any(UUID.class)))
+                .thenReturn(Optional.of(postalItem1));
+        when(postalHistoryRecordServiceImpl.getPostalHistory(any(UUID.class)))
+                .thenReturn(postalHistory);
 
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/post_item_delivery/check_history/{postal_item_id}", postalItem1.getPostalItemId().toString()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$..postalItem").exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$..postalHistoryOfItem").exists())
+                .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(postalItemInfo)));
+
+        verify(postalItemServiceImpl).findById(any(UUID.class));
+        verify(postalHistoryRecordServiceImpl).getPostalHistory(any(UUID.class));
+
+    }
 
 }

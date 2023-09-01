@@ -1,5 +1,6 @@
 package com.mailapp.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mailapp.entities.PostalOffice;
 import com.mailapp.enums.PostalStatus;
 
@@ -24,6 +25,7 @@ public class PostalHistoryOfItem {
 
     @Schema(description = "Время регистрации записи в истории.")
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss a z")
     private Timestamp timestamp;
 
     @Schema(description = "Статус почтового отправления.")
