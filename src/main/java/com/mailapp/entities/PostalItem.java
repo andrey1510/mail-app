@@ -1,23 +1,18 @@
 package com.mailapp.entities;
 
 import com.mailapp.enums.PostalType;
-
 import io.swagger.v3.oas.annotations.media.Schema;
-
 import jakarta.persistence.*;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import java.util.UUID;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
 @Entity
 @Builder
 @Table(name = "postal_item")

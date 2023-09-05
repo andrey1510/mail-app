@@ -16,4 +16,3 @@ springdoc:
   swagger-ui:
     enabled: true
     filter: true
-

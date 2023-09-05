@@ -1,16 +1,9 @@
 package com.mailapp.entities;
 
 import com.mailapp.enums.PostalStatus;
-
 import io.swagger.v3.oas.annotations.media.Schema;
-
 import jakarta.persistence.*;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
@@ -20,7 +13,9 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
 @Entity
 @Builder
 @Table(name = "postal_history_record")
@@ -58,4 +53,5 @@ public class PostalHistoryRecord {
         this.postalItem = postalItem;
         this.postalOffice = postalOffice;
     }
+
 }

@@ -1,16 +1,19 @@
 package com.mailapp.entities;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-
-import jakarta.persistence.*;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.*;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
 @Entity
 @Builder
 @Table(name = "postal_office")

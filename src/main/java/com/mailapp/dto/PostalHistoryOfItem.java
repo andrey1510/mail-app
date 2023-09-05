@@ -15,7 +15,9 @@ import java.sql.Timestamp;
 import java.util.UUID;
 
 @Builder
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostalHistoryOfItem {
