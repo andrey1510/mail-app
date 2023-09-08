@@ -23,20 +23,32 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.validation.BindingResult;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(PostalDeliveryController.class)
@@ -63,7 +75,7 @@ class PostalDeliveryControllerTests extends TestData {
 
     @Test
     @SneakyThrows
-    void registerPostalItemTest(){
+    void registerPostalItem(){
 
         when(postalItemServiceImpl.createPostalItem(any(PostalItem.class)))
                 .thenReturn(postalItem1);
@@ -81,12 +93,14 @@ class PostalDeliveryControllerTests extends TestData {
 
     @Test
     @SneakyThrows
-    void getPostalItemToPostalOfficeTest(){
+    void getPostalItemToPostalOffice(){
 
         when(postalItemServiceImpl.findById(any(UUID.class)))
                 .thenReturn(Optional.of(postalItem1));
         when(postalOfficeServiceImpl.findById(anyString()))
                 .thenReturn(Optional.of(postalOffice1));
+        when(postalHistoryRecordServiceImpl.getPostalHistory(any(UUID.class)))
+                .thenReturn(createItemHistoryList());
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/post_item_delivery/get_to_postal_office/{postal_item_id}&{office_index}",
                                 postalItem1.getPostalItemId().toString(), postalOffice1.getOfficeIndex())
@@ -100,15 +114,17 @@ class PostalDeliveryControllerTests extends TestData {
 
     @Test
     @SneakyThrows
-    void sendPostalItemFromPostalOfficeTest(){
+    void sendPostalItemFromPostalOffice(){
 
         when(postalItemServiceImpl.findById(any(UUID.class)))
                 .thenReturn(Optional.of(postalItem1));
         when(postalOfficeServiceImpl.findById(anyString()))
                 .thenReturn(Optional.of(postalOffice1));
+        when(postalHistoryRecordServiceImpl.getPostalHistory(any(UUID.class))).
+                thenReturn(createItemHistoryList2());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/post_item_delivery/send_from_postal_office/{postal_item_id}&{office_index}",
-                                postalItem1.getPostalItemId().toString(), postalOffice1.getOfficeIndex())
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/post_item_delivery/send_from_postal_office/{postal_item_id}",
+                                postalItem1.getPostalItemId().toString())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json("\"" + PostalStatus.OUT_OF_OFFICE + "\""));
@@ -119,10 +135,12 @@ class PostalDeliveryControllerTests extends TestData {
 
     @Test
     @SneakyThrows
-    void deliverPostalItemToRecipientTest(){
+    void deliverPostalItemToRecipient(){
 
         when(postalItemServiceImpl.findById(any(UUID.class)))
                 .thenReturn(Optional.of(postalItem1));
+        when(postalHistoryRecordServiceImpl.getPostalHistory(any(UUID.class)))
+                .thenReturn(createItemHistoryList());
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/post_item_delivery/deliver_to_recipient/{postal_item_id}",
                                 postalItem1.getPostalItemId().toString())
@@ -136,7 +154,7 @@ class PostalDeliveryControllerTests extends TestData {
 
     @Test
     @SneakyThrows
-    void checkPostalItemHistoryTest(){
+    void checkPostalItemHistory(){
 
         PostalItemInfo postalItemInfo = new PostalItemInfo(postalItem1, postalHistory);
 
@@ -145,7 +163,8 @@ class PostalDeliveryControllerTests extends TestData {
         when(postalHistoryRecordServiceImpl.getPostalHistory(any(UUID.class)))
                 .thenReturn(postalHistory);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/post_item_delivery/check_history/{postal_item_id}", postalItem1.getPostalItemId().toString()))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/post_item_delivery/check_history/{postal_item_id}",
+                        postalItem1.getPostalItemId().toString()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$..postalItem").exists())
@@ -157,4 +176,108 @@ class PostalDeliveryControllerTests extends TestData {
 
     }
 
+    @Test
+    @SneakyThrows
+    void getPostalItemToPostalOfficeThrowsPostalItemAlreadyReceivedException(){
+
+        when(postalItemServiceImpl.findById(any(UUID.class)))
+                .thenReturn(Optional.of(postalItem1));
+        when(postalOfficeServiceImpl.findById(anyString()))
+                .thenReturn(Optional.of(postalOffice1));
+        when(postalHistoryRecordServiceImpl.getPostalHistory(any(UUID.class)))
+                .thenReturn(createItemHistoryList4());
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/post_item_delivery/get_to_postal_office/{postal_item_id}&{office_index}",
+                                postalItem1.getPostalItemId().toString(), postalOffice1.getOfficeIndex())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+        verify(postalItemServiceImpl).findById(any(UUID.class));
+    }
+
+    @Test
+    @SneakyThrows
+    void getPostalItemToPostalOfficeThrowsPreviousOperationIsRequiredException(){
+
+        when(postalItemServiceImpl.findById(any(UUID.class)))
+                .thenReturn(Optional.of(postalItem1));
+        when(postalOfficeServiceImpl.findById(anyString()))
+                .thenReturn(Optional.of(postalOffice1));
+        when(postalHistoryRecordServiceImpl.getPostalHistory(any(UUID.class)))
+                .thenReturn(createItemHistoryList2());
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/post_item_delivery/get_to_postal_office/{postal_item_id}&{office_index}",
+                                postalItem1.getPostalItemId().toString(), postalOffice1.getOfficeIndex())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+        verify(postalItemServiceImpl).findById(any(UUID.class));
+    }
+
+    @Test
+    @SneakyThrows
+    void registerPostalItemThrowsValidationFailedException(){
+
+        BindingResult errors = mock(BindingResult.class);
+        when(errors.hasErrors())
+                .thenReturn(true);
+        RequestBuilder requestBuilder = post("/api/post_item_delivery/register")
+                .accept(MediaType.APPLICATION_JSON)
+                .content("{\"postalType\":\"Письмо\",\"recipientIndex\":\"12321422\",\"recipientAddress\":\"\",\"recipientName\":\"\"}")
+                .contentType(MediaType.APPLICATION_JSON);
+        MvcResult result = mockMvc.perform(requestBuilder).andExpect(status().isBadRequest()).andReturn();
+        MockHttpServletResponse response = result.getResponse();
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+
+        verify(postalItemServiceImpl, never()).findById(any(UUID.class));
+        verify(postalItemServiceImpl, never()).createPostalItem(any(PostalItem.class));
+
+    }
+
+    @Test
+    @SneakyThrows
+    void checkPostalItemHistoryThrowsEntityNotFoundException(){
+
+        when(postalItemServiceImpl.findById(any(UUID.class)))
+                .thenReturn(Optional.empty());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/post_item_delivery/check_history/{postal_item_id}",
+                        postalItem1.getPostalItemId().toString()))
+                .andExpect(status().isNotFound());
+
+        verify(postalItemServiceImpl, times(1))
+                .findById(any(UUID.class));
+    }
+
+    @Test
+    @SneakyThrows
+    void deliverPostalItemToRecipientThrowsEntityNotFoundException(){
+
+        when(postalItemServiceImpl.findById(any(UUID.class)))
+                .thenReturn(Optional.empty());
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/post_item_delivery/deliver_to_recipient/{postal_item_id}",
+                                postalItem1.getPostalItemId().toString())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+        verify(postalItemServiceImpl, times(1))
+                .findById(any(UUID.class));
+    }
+
+    @Test
+    @SneakyThrows
+    void sendPostalItemFromPostalOfficeThrowsEntityNotFoundException(){
+
+        when(postalItemServiceImpl.findById(any(UUID.class)))
+                .thenReturn(Optional.empty());
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/post_item_delivery/send_from_postal_office/{postal_item_id}",
+                                postalItem1.getPostalItemId().toString())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+        verify(postalItemServiceImpl, times(1))
+                .findById(any(UUID.class));
+    }
 }

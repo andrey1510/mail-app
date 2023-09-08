@@ -19,6 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.mockito.Mockito.when;
 
@@ -40,7 +41,7 @@ class PostalItemManagementControllerTests extends TestData {
 
     @Test
     @SneakyThrows
-    void findByIdTest() {
+    void findById() {
 
         when(postalItemServiceImpl.findById(postalItem1.getPostalItemId()))
                 .thenReturn(Optional.of(postalItem1));
@@ -53,6 +54,18 @@ class PostalItemManagementControllerTests extends TestData {
                 .andExpect(jsonPath("$.recipientIndex", Matchers.is(postalItem1.getRecipientIndex())))
                 .andExpect(jsonPath("$.recipientAddress", Matchers.is(postalItem1.getRecipientAddress())))
                 .andExpect(jsonPath("$.recipientName", Matchers.is(postalItem1.getRecipientName())));
+    }
+
+    @Test
+    @SneakyThrows
+    void findByIdThrowsEntityNotFoundException() {
+
+        UUID wrongUUID = UUID.fromString("d1394e33-c225-49e5-a8f0-d2d8052b7af8");
+        when(postalItemServiceImpl.findById(wrongUUID))
+                .thenReturn(Optional.empty());
+
+        this.mockMvc.perform(get("/api/postal_item/{itemUUID1}", postalItem1.getPostalItemId().toString()))
+                .andExpect(status().isNotFound());
     }
 
 }

@@ -8,7 +8,9 @@ import org.junit.Test;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 
 public class PostalHistoryOfItemTests {
 
@@ -18,7 +20,11 @@ public class PostalHistoryOfItemTests {
                 .historyRecordId(UUID.randomUUID())
                 .timestamp(new Timestamp(System.currentTimeMillis()))
                 .postalStatus(PostalStatus.IN_OFFICE)
-                .postalOffice(new PostalOffice("125009", "Почтовое отделение № 125009", "г. Москва, ул. Тверская, дом 9, стр. 5"))
+                .postalOffice(new PostalOffice(
+                        "125009",
+                        "Почтовое отделение № 125009",
+                        "г. Москва, ул. Тверская, дом 9, стр. 5"
+                ))
                 .build();
 
         assertNotNull(postalHistory);
@@ -35,7 +41,11 @@ public class PostalHistoryOfItemTests {
                 .historyRecordId(uuid)
                 .timestamp(new Timestamp(System.currentTimeMillis()))
                 .postalStatus(PostalStatus.IN_OFFICE)
-                .postalOffice(new PostalOffice("125009", "Почтовое отделение № 125009", "г. Москва, ул. Тверская, дом 9, стр. 5"))
+                .postalOffice(new PostalOffice(
+                        "125009",
+                        "Почтовое отделение № 125009",
+                        "г. Москва, ул. Тверская, дом 9, стр. 5"
+                ))
                 .build();
 
         assertEquals(uuid, postalHistory.getHistoryRecordId());
@@ -48,7 +58,11 @@ public class PostalHistoryOfItemTests {
                 .historyRecordId(UUID.randomUUID())
                 .timestamp(timestamp)
                 .postalStatus(PostalStatus.IN_OFFICE)
-                .postalOffice(new PostalOffice("125009", "Почтовое отделение № 125009", "г. Москва, ул. Тверская, дом 9, стр. 5"))
+                .postalOffice(new PostalOffice(
+                        "125009",
+                        "Почтовое отделение № 125009",
+                        "г. Москва, ул. Тверская, дом 9, стр. 5"
+                ))
                 .build();
 
         assertEquals(timestamp, postalHistory.getTimestamp());
@@ -61,7 +75,11 @@ public class PostalHistoryOfItemTests {
                 .historyRecordId(UUID.randomUUID())
                 .timestamp(new Timestamp(System.currentTimeMillis()))
                 .postalStatus(postalStatus)
-                .postalOffice(new PostalOffice("125009", "Почтовое отделение № 125009", "г. Москва, ул. Тверская, дом 9, стр. 5"))
+                .postalOffice(new PostalOffice(
+                        "125009",
+                        "Почтовое отделение № 125009",
+                        "г. Москва, ул. Тверская, дом 9, стр. 5"
+                ))
                 .build();
 
         assertEquals(postalStatus, postalHistory.getPostalStatus());

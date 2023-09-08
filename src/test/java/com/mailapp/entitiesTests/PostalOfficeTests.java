@@ -2,15 +2,20 @@ package com.mailapp.entitiesTests;
 
 import com.mailapp.entities.PostalOffice;
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 
 public class PostalOfficeTests {
 
     @Test
     public void testCreation() {
-        PostalOffice postalOffice = new PostalOffice("125009", "Почтовое отделение № 125009", "г. Москва, ул. Тверская, дом 9, стр. 5");
+        PostalOffice postalOffice = new PostalOffice(
+                "125009",
+                "Почтовое отделение № 125009",
+                "г. Москва, ул. Тверская, дом 9, стр. 5"
+        );
         assertNotNull(postalOffice);
         assertEquals("125009", postalOffice.getOfficeIndex());
         assertEquals("Почтовое отделение № 125009", postalOffice.getOfficeTitle());

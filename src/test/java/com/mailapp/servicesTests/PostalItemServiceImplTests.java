@@ -15,7 +15,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 
 @ExtendWith(MockitoExtension.class)
 class PostalItemServiceImplTests extends TestData {
@@ -36,9 +39,11 @@ class PostalItemServiceImplTests extends TestData {
 
     @Test
     void findByIdTest(){
-        when(postalItemRepository.findById(postalItem1.getPostalItemId())).thenReturn(Optional.of(postalItem1));
+        when(postalItemRepository.findById(postalItem1.getPostalItemId()))
+                .thenReturn(Optional.of(postalItem1));
         assertEquals(postalItem1, postalItemServiceImpl.findById(postalItem1.getPostalItemId()).orElseThrow());
-        verify(postalItemRepository, times(1)).findById(postalItem1.getPostalItemId());
+        verify(postalItemRepository, times(1))
+                .findById(postalItem1.getPostalItemId());
     }
 
 }

@@ -1,20 +1,25 @@
 package com.mailapp.entitiesTests;
 
 import com.mailapp.entities.PostalItem;
-import com.mailapp.entities.PostalOffice;
 import com.mailapp.enums.PostalType;
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 
 import java.util.UUID;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class PostalItemTests {
 
     @Test
     public void testCreation() {
-        PostalItem postalItem = new PostalItem(UUID.randomUUID(), PostalType.LETTER, "123001", "Москва, ул. Лесная, д. 4, кв. 10", "Кузнецов Петр Михайлович");
+        PostalItem postalItem = new PostalItem(
+                UUID.randomUUID(),
+                PostalType.LETTER,
+                "123001",
+                "Москва, ул. Лесная, д. 4, кв. 10",
+                "Кузнецов Петр Михайлович"
+        );
         assertNotNull(postalItem);
         assertEquals(PostalType.LETTER, postalItem.getPostalType());
         assertEquals("123001", postalItem.getRecipientIndex());

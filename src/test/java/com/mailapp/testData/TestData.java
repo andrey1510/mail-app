@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.mailapp.enums.PostalStatus.IN_OFFICE;
+import static com.mailapp.enums.PostalStatus.OUT_OF_OFFICE;
+import static com.mailapp.enums.PostalStatus.RECEIVED;
 import static com.mailapp.enums.PostalStatus.REGISTERED;
 import static com.mailapp.enums.PostalType.LETTER;
 
@@ -111,7 +113,7 @@ public abstract class TestData {
         ));
     }
 
-    protected List<PostalHistoryOfItem> createItemHistoryList(){
+    protected List<PostalHistoryOfItem> createItemHistoryList3(){
 
         return new ArrayList<>(List.of(
                 PostalHistoryOfItem.builder()
@@ -129,11 +131,61 @@ public abstract class TestData {
         ));
     }
 
+    protected List<PostalHistoryOfItem> createItemHistoryList(){
+        return new ArrayList<>(List.of(
+                PostalHistoryOfItem.builder()
+                        .historyRecordId(UUID.fromString("a9c73dd6-78bb-48ae-beae-ff4c1136793e"))
+                        .timestamp(Timestamp.valueOf("2023-08-27 12:29:38.22861"))
+                        .postalStatus(OUT_OF_OFFICE)
+                        .postalOffice(createOffice1())
+                        .build(),
+                PostalHistoryOfItem.builder()
+                        .historyRecordId(UUID.fromString("d1394e33-c225-49e5-a8f0-d2d8052b7af8"))
+                        .timestamp(Timestamp.valueOf("2023-08-26 19:19:38.11161"))
+                        .postalStatus(REGISTERED)
+                        .postalOffice(createOfficeNull())
+                        .build()
+        ));
+    }
+
+    protected List<PostalHistoryOfItem> createItemHistoryList2(){
+        return new ArrayList<>(List.of(
+                PostalHistoryOfItem.builder()
+                        .historyRecordId(UUID.fromString("a9c73dd6-78bb-48ae-beae-ff4c1136793e"))
+                        .timestamp(Timestamp.valueOf("2023-08-30 12:29:38.22861"))
+                        .postalStatus(IN_OFFICE)
+                        .postalOffice(createOffice1())
+                        .build(),
+                PostalHistoryOfItem.builder()
+                        .historyRecordId(UUID.fromString("d1394e33-c225-49e5-a8f0-d2d8052b7af8"))
+                        .timestamp(Timestamp.valueOf("2023-08-26 19:19:38.11161"))
+                        .postalStatus(REGISTERED)
+                        .postalOffice(createOfficeNull())
+                        .build()
+        ));
+    }
+
+    protected List<PostalHistoryOfItem> createItemHistoryList4(){
+        return new ArrayList<>(List.of(
+                PostalHistoryOfItem.builder()
+                        .historyRecordId(UUID.fromString("a9c73dd6-78bb-48ae-beae-ff4c1136793e"))
+                        .timestamp(Timestamp.valueOf("2023-08-30 12:29:38.22861"))
+                        .postalStatus(RECEIVED)
+                        .postalOffice(createOffice1())
+                        .build(),
+                PostalHistoryOfItem.builder()
+                        .historyRecordId(UUID.fromString("d1394e33-c225-49e5-a8f0-d2d8052b7af8"))
+                        .timestamp(Timestamp.valueOf("2023-08-26 19:19:38.11161"))
+                        .postalStatus(REGISTERED)
+                        .postalOffice(createOfficeNull())
+                        .build()
+        ));
+    }
+
     protected String createItemJsonString1(){
         return "{" +
                 "\"postalType\":\"Письмо\"," +
-                "\"postcode\":\"101001\"," +
-                "\"recipientIndex\":\"Dublin\"," +
+                "\"recipientIndex\":\"101001\"," +
                 "\"recipientAddress\":\"г. Москва, ул. Первая, дом 1\"," +
                 "\"recipientName\":\"Петров Петр Петрович\"}";
     }

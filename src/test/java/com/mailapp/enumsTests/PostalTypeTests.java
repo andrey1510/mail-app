@@ -3,7 +3,7 @@ package com.mailapp.enumsTests;
 import com.mailapp.enums.PostalType;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PostalTypeTests {
 

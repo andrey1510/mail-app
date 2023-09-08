@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 public class HistoryConverterTests {
 
@@ -18,8 +20,21 @@ public class HistoryConverterTests {
     public void testMapToPostalHistoryOfItem() {
 
         List<Object[]> result = new ArrayList<>();
-        Object[] obj1 = {UUID.randomUUID(), new Timestamp(System.currentTimeMillis()), PostalStatus.IN_OFFICE, "Office 1", "123456", "Address 1"};
-        Object[] obj2 = {UUID.randomUUID(), new Timestamp(System.currentTimeMillis()), PostalStatus.OUT_OF_OFFICE, "Office 2", "654321", "Address 2"};
+        Object[] obj1 = {
+                UUID.randomUUID(),
+                new Timestamp(System.currentTimeMillis()),
+                PostalStatus.IN_OFFICE,
+                "Office 1",
+                "123456",
+                "Address 1"
+        };
+        Object[] obj2 = {
+                UUID.randomUUID(),
+                new Timestamp(System.currentTimeMillis()),
+                PostalStatus.OUT_OF_OFFICE,
+                "Office 2",
+                "654321",
+                "Address 2"};
         result.add(obj1);
         result.add(obj2);
 
@@ -56,8 +71,20 @@ public class HistoryConverterTests {
         List<Object[]> result = new ArrayList<>();
         UUID uuid1 = UUID.randomUUID();
         UUID uuid2 = UUID.randomUUID();
-        Object[] obj1 = {uuid1, new Timestamp(System.currentTimeMillis()), PostalStatus.IN_OFFICE, "Office 1", "123456", "Address 1"};
-        Object[] obj2 = {uuid2, new Timestamp(System.currentTimeMillis()), PostalStatus.OUT_OF_OFFICE, "Office 2", "654321", "Address 2"};
+        Object[] obj1 = {
+                uuid1,
+                new Timestamp(System.currentTimeMillis()),
+                PostalStatus.IN_OFFICE,
+                "Office 1",
+                "123456",
+                "Address 1"};
+        Object[] obj2 = {
+                uuid2,
+                new Timestamp(System.currentTimeMillis()),
+                PostalStatus.OUT_OF_OFFICE,
+                "Office 2",
+                "654321",
+                "Address 2"};
         result.add(obj1);
         result.add(obj2);
 

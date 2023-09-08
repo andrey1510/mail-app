@@ -2,8 +2,23 @@ package com.mailapp.entities;
 
 import com.mailapp.enums.PostalStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
@@ -32,7 +47,7 @@ public class PostalHistoryRecord {
     @Schema(requiredMode = REQUIRED, description = "Статус почтового отправления.")
     private PostalStatus postalStatus;
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne(cascade= CascadeType.ALL)
     private PostalItem postalItem;
 
     @ManyToOne(cascade=CascadeType.ALL)

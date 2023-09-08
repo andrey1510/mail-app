@@ -11,6 +11,9 @@ import java.util.UUID;
 
 public class HistoryConverter {
 
+    private HistoryConverter() {
+    }
+
     public static List<PostalHistoryOfItem> mapToPostalHistoryOfItemDTO(List<Object[]> result) {
         return result.stream().map(e -> {
 

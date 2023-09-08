@@ -4,14 +4,13 @@ import com.mailapp.entities.PostalHistoryRecord;
 import com.mailapp.entities.PostalItem;
 import com.mailapp.entities.PostalOffice;
 import com.mailapp.enums.PostalStatus;
-import com.mailapp.enums.PostalType;
 import com.mailapp.testData.TestData;
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 
 import java.sql.Timestamp;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class PostalHistoryRecordTests extends TestData {
 
