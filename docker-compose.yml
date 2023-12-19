@@ -1,0 +1,22 @@
+services:
+
+  mail-app:
+    container_name: mail
+    build: .
+#    build:
+#      context: .
+#      dockerfile: /Dockerfile
+    ports:
+      - 8484:8080
+    restart: unless-stopped
+
+  postal-db:
+    container_name: mail-database
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=mailbase
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+    ports:
+      - 28282:5432
+    restart: unless-stopped
