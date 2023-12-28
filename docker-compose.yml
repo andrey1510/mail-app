@@ -1,17 +1,11 @@
+#networks:
+#  mail-network:
+#    driver: bridge
+
 services:
 
-  mail-app:
-    container_name: mail
-    build: .
-#    build:
-#      context: .
-#      dockerfile: /Dockerfile
-    ports:
-      - 8484:8080
-    restart: unless-stopped
-
-  postal-db:
-    container_name: mail-database
+  db:
+    container_name: db
     image: postgres:15
     environment:
       - POSTGRES_DB=mailbase
@@ -20,3 +14,24 @@ services:
     ports:
       - 28282:5432
     restart: unless-stopped
+#    networks:
+#      - mail-network
+
+  app:
+    container_name: app
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - MAVEN_SKIP_TESTS=true
+    ports:
+      - 8080:8080
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db/mailbase
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=password
+    restart: unless-stopped
+    depends_on:
+      - db
+#    networks:
+#      - mail-network

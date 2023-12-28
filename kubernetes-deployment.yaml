@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: mail-app
-          image: andrey1510/mail-app:1.0.0
+          image: andrey1510/mail-app:1.0.1
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
@@ -37,7 +37,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres-db-deployment
+  name: postgres-db-deploymen
   labels:
     app: postgres-db
 spec:
@@ -100,5 +100,24 @@ data:
   postgres-user: user
   postgres-password: password
   postgres-database: mailbase
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mail-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+    - host: mail-app.com
+      http:
+        paths:
+          - path: /
+            pathType: Exact
+            backend:
+              service:
+                name: mail-app-service
+                port:
+                  number: 8888
 
 

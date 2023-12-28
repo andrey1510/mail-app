@@ -1,13 +1,10 @@
-server:
-  port: 8080
-
 spring:
   application:
     name: mail-app
-  datasource:
-    url: jdbc:postgresql://localhost:28282/mailbase
-    username: user
-    password: password
+#  datasource:
+#    url: jdbc:postgresql://localhost:28282/mailbase
+#    username: user
+#    password: password
   jpa:
     hibernate:
       ddl-auto: update
