@@ -37,7 +37,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres-db-deploymen
+  name: postgres-db-deployment
   labels:
     app: postgres-db
 spec:
@@ -119,5 +119,3 @@ spec:
                 name: mail-app-service
                 port:
                   number: 8888
-
-
